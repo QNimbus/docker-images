@@ -34,3 +34,9 @@ deploy:
     script: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin && make -C ./ubuntu/20.04 push-image
     on:
       branch: master
+
+  # Deploy docker image to registry
+  - provider: script
+    script: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin && make -C ./ansible/ubuntu/20.04 push-image
+    on:
+      branch: master
