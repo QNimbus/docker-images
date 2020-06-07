@@ -16,15 +16,6 @@ before_install:
 before_script:
   - docker version
 
-# script:
-#   # Test building ubuntu/20.04/Dockerfile.
-#   - docker build --tag qnimbus/docker-ubuntu:$TAG ubuntu/$TAG/Dockerfile
-#     # Test running the container.
-#   - docker run --name test-container -d qnimbus/docker-ubuntu:$TAG
-
-#   # Verify os/distro running in container.
-#   - docker exec --tty test-container lsb_release -a
-
 # First execute the test suite.
 # After the test execution is done and didn't fail, build the images
 # (if this step fails the whole Travis build is considered a failure).

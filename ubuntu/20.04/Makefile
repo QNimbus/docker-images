@@ -1,8 +1,10 @@
 IMAGE := ${DOCKER_IMAGE_ID}
-VERSION:= $(shell grep 'ARG VERSION=' Dockerfile | awk 'NR==1{print $2}' | cut -d '=' -f 2)
+VERSION := $(shell grep 'ARG VERSION=' Dockerfile | awk 'NR==1{print $2}' | cut -d '=' -f 2)
 
 test:
-	true
+	$(eval CONTAINER_ID := $(shell docker run -it --rm --detach ${IMAGE}:${VERSION}))
+	docker exec --tty ${CONTAINER_ID} lsb_release -a
+	docker stop ${CONTAINER_ID}
 
 image:
 	docker build -t ${IMAGE}:${VERSION} .
