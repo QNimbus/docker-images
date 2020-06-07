@@ -1,0 +1,5 @@
+version: '3'
+services:
+  docker-ubuntu-ansible:
+    build: .
+    image: qnimbus/docker-ubuntu-ansible:v20.04

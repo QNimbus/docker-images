@@ -8,7 +8,8 @@ dist: bionic
 
 env:
   global:
-    - DOCKER_IMAGE_ID="${DOCKER_USERNAME}/ubuntu"
+    - DOCKER_UBUNTU_IMAGE_ID="${DOCKER_USERNAME}/ubuntu"
+    - DOCKER_UBUNTU_ANSIBLE_IMAGE_ID="${DOCKER_USERNAME}/ansible-ubuntu"
 
 before_install:
   - ./.travis/main.sh
@@ -20,15 +21,16 @@ before_script:
 # After the test execution is done and didn't fail, build the images
 # (if this step fails the whole Travis build is considered a failure).
 script:
-  - cd ubuntu/20.04
-  - make test
-  - make image
+  - make -C ./ubuntu/20.04 test
+  - make -C ./ubuntu/20.04 image
+  - make -C ./ansible/ubuntu/20.04 test
+  - make -C ./ansible/ubuntu/20.04 image
 
 # To have `DOCKER_USERNAME` and `DOCKER_PASSWORD` filled you need to either use `travis`' cli and then `travis set ..`
 # or go to the travis page of your repository and then change the environment in the settings pannel.
 deploy:
   # Deploy docker image to registry
   - provider: script
-    script: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin && make push-image
+    script: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin && make -C ./ubuntu/20.04 push-image
     on:
       branch: master

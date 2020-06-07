@@ -1,4 +1,4 @@
-IMAGE := ${DOCKER_UBUNTU_IMAGE_ID}
+IMAGE := ${DOCKER_UBUNTU_ANSIBLE_IMAGE_ID}
 VERSION := $(shell grep 'ARG VERSION=' Dockerfile | awk 'NR==1{print $2}' | cut -d '=' -f 2)
 
 test:
