@@ -2,5 +2,7 @@
 
 apt-get-min clean
 rm -rf /var/lib/apt/lists/* \
+       /usr/share/doc       \
+       /usr/share/man       \
        /tmp/*               \
        /var/tmp/*
