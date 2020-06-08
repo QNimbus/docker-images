@@ -57,5 +57,8 @@ RUN apt-cleanup
 ## INIT
 ##
 
+EXPOSE 22
+
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
+
 CMD ["/usr/sbin/sshd", "-D"]
