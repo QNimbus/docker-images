@@ -21,6 +21,7 @@ RUN apt-get-install-min \
     python3-setuptools  \
     python3-pip         \
     rsyslog             \
+    sshpass             \
     sudo                \
     systemd-cron        \
     iproute2
@@ -51,14 +52,27 @@ RUN sed -i 's/#PermitRootLogin.*$/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN rm -f /lib/systemd/system/systemd*udev* && \
     rm -f /lib/systemd/system/getty.target
 
+RUN cd /lib/systemd/system/sysinit.target.wants/ \
+    && ls | grep -v systemd-tmpfiles-setup | xargs rm -f $1
+
+RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
+    /etc/systemd/system/*.wants/* \
+    /lib/systemd/system/local-fs.target.wants/* \
+    /lib/systemd/system/sockets.target.wants/*udev* \
+    /lib/systemd/system/sockets.target.wants/*initctl* \
+    /lib/systemd/system/basic.target.wants/* \
+    /lib/systemd/system/anaconda.target.wants/* \
+    /lib/systemd/system/plymouth* \
+    /lib/systemd/system/systemd-update-utmp*
+
 RUN apt-cleanup
 
 ##
 ## INIT
 ##
 
+STOPSIGNAL SIGRTMIN+3
+
 EXPOSE 22
 
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
-
-CMD ["/usr/sbin/sshd", "-D"]

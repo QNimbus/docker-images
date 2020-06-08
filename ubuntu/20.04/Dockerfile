@@ -68,12 +68,12 @@ RUN apt-get-install-min language-pack-en        && \
     locale-gen en_US                            && \
     update-locale LANG=$LANG LC_CTYPE=$LC_CTYPE
 
-# s6 overlay
-ADD https://github.com/just-containers/s6-overlay/releases/download/v1.18.1.5/s6-overlay-amd64.tar.gz /tmp/s6-overlay.tar.gz
+# # s6 overlay
+# ADD https://github.com/just-containers/s6-overlay/releases/download/v1.18.1.5/s6-overlay-amd64.tar.gz /tmp/s6-overlay.tar.gz
 
-RUN tar xzf /tmp/s6-overlay.tar.gz -C / --exclude="./bin" --exclude="./sbin" && \
-    tar xzf /tmp/s6-overlay.tar.gz -C /usr ./bin && \
-    tar xzf /tmp/s6-overlay.tar.gz -C /usr ./sbin
+# RUN tar xzf /tmp/s6-overlay.tar.gz -C / --exclude="./bin" --exclude="./sbin" && \
+#     tar xzf /tmp/s6-overlay.tar.gz -C /usr ./bin && \
+#     tar xzf /tmp/s6-overlay.tar.gz -C /usr ./sbin
 
 ##
 ## CLEANUP
@@ -85,4 +85,4 @@ RUN apt-cleanup
 ## INIT
 ##
 
-ENTRYPOINT [ "/init" ]
+ENTRYPOINT [ "/sbin/init" ]
