@@ -76,8 +76,4 @@ RUN apt-cleanup
 ## INIT
 ##
 
-STOPSIGNAL SIGRTMIN+3
-
 EXPOSE 22
-
-VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
