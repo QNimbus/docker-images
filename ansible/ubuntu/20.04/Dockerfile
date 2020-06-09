@@ -47,23 +47,28 @@ RUN sed -i 's/#PermitRootLogin.*$/PermitRootLogin yes/' /etc/ssh/sshd_config
 ## CLEANUP
 ##
 
-# Remove unnecessary getty and udev targets that result in high CPU usage when using
-# multiple containers with Molecule (https://github.com/ansible/molecule/issues/1104)
-RUN rm -f /lib/systemd/system/systemd*udev* && \
-    rm -f /lib/systemd/system/getty.target
+# Do not run udev
+RUN true \
+    && systemctl mask systemd-udev-trigger.service \
+    && systemctl mask systemd-udevd.service \
+    && systemctl mask systemd-udevd.socket \
+    && systemctl mask systemd-udevd-kernel.socket \
+    && true
 
-RUN cd /lib/systemd/system/sysinit.target.wants/ \
-    && ls | grep -v systemd-tmpfiles-setup | xargs rm -f $1
-
-RUN rm -f /lib/systemd/system/multi-user.target.wants/* \
-    /etc/systemd/system/*.wants/* \
-    /lib/systemd/system/local-fs.target.wants/* \
-    /lib/systemd/system/sockets.target.wants/*udev* \
-    /lib/systemd/system/sockets.target.wants/*initctl* \
-    /lib/systemd/system/basic.target.wants/* \
-    /lib/systemd/system/anaconda.target.wants/* \
-    /lib/systemd/system/plymouth* \
-    /lib/systemd/system/systemd-update-utmp*
+# Mask services that are not required and/or might interfere.
+RUN true \
+    && systemctl mask getty.target \
+    && systemctl mask dbus.service \
+    && systemctl mask dbus.socket \
+    && systemctl mask rsyslog.service \
+    && systemctl mask systemd-initctl.socket \
+    && systemctl mask systemd-logind.service \
+    && systemctl mask systemd-resolved.service \
+    && systemctl mask systemd-timesyncd.service \
+    && systemctl mask systemd-journald.service \
+    && systemctl mask ssystemd-journald.socket \
+    && systemctl mask ssystemd-journald-audit.socket \
+    && true
 
 RUN apt-cleanup
 
