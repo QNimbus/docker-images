@@ -30,9 +30,6 @@ RUN ls /usr/bin/apt* /usr/bin/dpkg* |                                    \
 # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=594189
 ENV INITRD no
 
-# Inform systemd that it is running inside a container
-ENV container docker
-
 # Temporarily disable dpkg fsync to make building faster.
 RUN if [ ! -e /etc/dpkg/dpkg.cfg.d/docker-apt-speedup ]; then         \
 	  echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/docker-apt-speedup; \
@@ -82,8 +79,4 @@ RUN apt-cleanup
 ## INIT
 ##
 
-STOPSIGNAL SIGRTMIN+3
-
-VOLUME [ "/sys/fs/cgroup", "/tmp", "/run" ]
-
-ENTRYPOINT [ "/sbin/init" ]
+ENTRYPOINT [ "/bin/sh" ]

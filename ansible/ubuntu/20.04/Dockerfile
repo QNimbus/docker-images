@@ -5,6 +5,10 @@ MAINTAINER B. van Wetten <bas@vanwetten.com>
 ARG VERSION
 RUN echo $VERSION > image_version
 
+# Inform systemd that it is running inside a container
+ENV container docker
+
+# List of python pip packages to be installed
 ENV pip_packages "ansible"
 
 ##
@@ -77,3 +81,9 @@ RUN apt-cleanup
 ##
 
 EXPOSE 22
+
+STOPSIGNAL SIGRTMIN+3
+
+VOLUME [ "/sys/fs/cgroup", "/tmp", "/run" ]
+
+ENTRYPOINT [ "/sbin/init" ]
